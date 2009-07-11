@@ -14,6 +14,9 @@ class MySQL
 	/**
 	 * Construct
 	 * Easily connect to the database.
+	 * @param string $server Server to connect to.
+	 * @param string $user The username to connect as.
+	 * @param string $pass The password for the user.
 	 */
 	public function __construct($server='',$user='',$pass='',$dbname='')
 	{
@@ -36,12 +39,19 @@ class MySQL
 	/**
 	 * Connect
 	 * Connect to the MySQL server.
+	 * @param string $server Server to connect to.
+	 * @param string $user The username to connect as.
+	 * @param string $pass The password for the user.
 	*/
 	public function connect($server,$user,$pass)
 	{
 		$this->link = mysql_connect($server,$user,$pass) or $this->halt();
 	}
 	
+	/**
+	 * Close connection
+	 * Used to close the connection to the server.
+	 */
 	public function close()
 	{
 		mysql_close($this->link);
