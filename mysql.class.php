@@ -154,15 +154,38 @@ class MySQL
 	public function insert($table,$data)
 	{
 		$fields = array();
-		$defaults = $this->getfields($table);
+		//$defaults = $this->getfields($table);
 		
-		foreach($defaults as $column => $value)
+		/*foreach($defaults as $column => $value)
 		{
 			if(isset($data[$column]))
-				$fields[$column] = $data[$column];
+				$fields[$column] = $this->res($data[$column]);
 			else
-				$fields[$column] = $value;
+				$fields[$column] = $this->res($value);
+		}*/
+		
+		$fetch = $this->query("SHOW COLUMNS FROM ".$this->prefix.$table);
+		while($info = $this->fetcharray($fetch)) {
+			//$fields[$info['Field']] = $info['Default'];
+			
+			if(isset($data[$info['Field']])) {
+				if($info['Type'] == 'date'
+				or $info['Type'] == 'datetime'
+				or $info['Type'] == 'time')
+					$fields[$info['Field']] = $this->res($data[$info['Field']]);
+				else
+					$fields[$info['Field']] = "'".$this->res($data[$info['Field']])."'";
+			} else {
+				if($info['Type'] == 'date'
+				or $info['Type'] == 'datetime'
+				or $info['Type'] == 'time')
+					$fields[$info['Field']] = $this->res('NOW');
+				else
+					$fields[$info['Field']] = "'".$this->res($info['Default'])."'";
+			}
 		}
+		
+		print_r($fields);
 	}
 	
 	/**
