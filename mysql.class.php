@@ -9,7 +9,7 @@ class MySQL
 {
 	private $link = NULL;
 	private $last_query = NULL;
-	private $query_count = 0;
+	public $query_count = 0;
 	
 	/**
 	 * Construct
