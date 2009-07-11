@@ -117,29 +117,44 @@ class MySQL
 		return $this->realescapestring($string);
 	}
 	
+	/**
+	 * Num Rows
+	 * Get number of rows in result.
+	 */
 	public function numrows($result)
 	{
 		return mysql_num_rows($result);
 	}
 	
+	/**
+	 * Query First
+	 * Query and fetch the array of the first row returned.
+	 */
 	public function queryfirst($query)
 	{
 		return $this->fetcharray($this->query($query));
 	}
 	
+	// MySQL Error Number
 	private function errno()
 	{
 		return mysql_errno($this->link);
 	}
 	
+	// MySQL Error
 	private function error()
 	{
 		return mysql_error($this->link);
 	}
 	
-	private function halt($query=NULL)
+	// The halt function. used to display errors..
+	private function halt()
 	{
-		error('Database','#'.$this->errno().': '.$this->error());
+		print("<blockquote style=\"border:2px solid darkred;padding:5px;background:#f9f9f9;font-family:arial; font-size: 14px;\">");
+		print("<h1 style=\"margin:0px;color:#000;border-bottom:1px solid #000;margin-bottom:10px;\">Database Error</h1>");
+		print("<div style=\"padding: 0;\">".'#'.$this->errno().': '.$this->error()."</div>");
+		print("</blockquote>");
+		exit;
 	}
 }
 ?>
