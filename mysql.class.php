@@ -56,6 +56,11 @@ class MySQL
 		mysql_select_db($dbname,$this->link);
 	}
 	
+	/**
+	 * Query
+	 * Query the selected Database.
+	 * @param string $query The query to run.
+	 */
 	public function query($query)
 	{
 		$result = mysql_query($query,$this->link) or $this->halt($query);
@@ -64,20 +69,52 @@ class MySQL
 		return $result;
 	}
 	
+	/**
+	 * Fetch Array
+	 * Returns an array that corresponds to the fetched row.
+	 */
 	public function fetcharray($result)
 	{
 		$result = mysql_fetch_array($result); // or $this->halt();
 		return $result;
 	}
 	
+	/**
+	 * Escape String
+	 * Escapes a string for use in a query.
+	 * @param string $string String to escape.
+	 * @return string
+	 */
+	public function escapestring($string)
+	{
+		return mysql_escape_string($string);
+	}
+	
+	/**
+	 * Escape String short cut.
+	 */
 	public function es($string)
 	{
 		return $this->escapestring($string);
 	}
 	
-	public function escapestring($string)
+	/**
+	 * Real Escape String
+	 * Escapes special characters from a string for use in a query.
+	 * @param string $string String to escape.
+	 * @return string
+	 */
+	public function realescapestring($string)
 	{
 		return mysql_real_escape_string($string);
+	}
+	
+	/**
+	 * Real Escape String short cut.
+	 */
+	public function res($string)
+	{
+		return $this->realescapestring($string);
 	}
 	
 	public function numrows($result)
