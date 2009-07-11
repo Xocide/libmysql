@@ -154,38 +154,28 @@ class MySQL
 	public function insert($table,$data)
 	{
 		$fields = array();
-		//$defaults = $this->getfields($table);
-		
-		/*foreach($defaults as $column => $value)
-		{
-			if(isset($data[$column]))
-				$fields[$column] = $this->res($data[$column]);
-			else
-				$fields[$column] = $this->res($value);
-		}*/
-		
-		$fetch = $this->query("SHOW COLUMNS FROM ".$this->prefix.$table);
-		while($info = $this->fetcharray($fetch)) {
-			//$fields[$info['Field']] = $info['Default'];
-			
+		$getdefaults = $this->query("SHOW COLUMNS FROM ".$this->prefix.$table);
+		while($info = $this->fetcharray($getdefaults)) {
 			if(isset($data[$info['Field']])) {
 				if($info['Type'] == 'date'
 				or $info['Type'] == 'datetime'
 				or $info['Type'] == 'time')
-					$fields[$info['Field']] = $this->res($data[$info['Field']]);
+					$fields[$info['Field']] = "'".$this->res($data[$info['Field']])."'";
 				else
 					$fields[$info['Field']] = "'".$this->res($data[$info['Field']])."'";
 			} else {
 				if($info['Type'] == 'date'
 				or $info['Type'] == 'datetime'
 				or $info['Type'] == 'time')
-					$fields[$info['Field']] = $this->res('NOW');
+					$fields[$info['Field']] = $this->res('NOW()');
+				elseif(substr($info['Type'],0,6) == 'bigint'
+				or substr($info['Type'],0,8) == 'smallint')
+					$fields[$info['Field']] = $this->res('NULL');
 				else
 					$fields[$info['Field']] = "'".$this->res($info['Default'])."'";
 			}
 		}
-		
-		print_r($fields);
+		$this->query("INSERT INTO ".$this->prefix.$table." VALUES(".implode(', ',$fields).")");
 	}
 	
 	/**
