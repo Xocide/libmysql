@@ -145,6 +145,41 @@ class MySQL
 		return $this->fetcharray($this->query($query));
 	}
 	
+	/**
+	 * Insert
+	 * Easily insert data into a table.
+	 * @param string $table The table to insert data into.
+	 * @param array $data Array filled with column data.
+	 */
+	public function insert($table,$data)
+	{
+		$fields = array();
+		$defaults = $this->getfields($table);
+		
+		foreach($defaults as $column => $value)
+		{
+			if(isset($data[$column]))
+				$fields[$column] = $data[$column];
+			else
+				$fields[$column] = $value;
+		}
+	}
+	
+	/**
+	 * Get Fields
+	 * Get the fields of the specified table.
+	 * @param string $table Table name.
+	 * @return array
+	 */
+	public function getfields($table) {
+		$fields = array();
+		$fetch = $this->query("SHOW COLUMNS FROM ".$this->prefix.$table);
+		while($info = $this->fetcharray($fetch)) {
+			$fields[$info['Field']] = $info['Default'];
+		}
+		return $fields;
+	}
+	
 	// MySQL Error Number
 	private function errno()
 	{
