@@ -7,9 +7,9 @@
 
 class MySQL
 {
-	private $link = NULL;
-	private $last_query = NULL;
-	public $query_count = 0;
+	private $link = NULL; // Server link
+	private $last_query = NULL; // Last query run
+	public $query_count = 0; // Query count
 	
 	/**
 	 * Construct
@@ -22,8 +22,8 @@ class MySQL
 	{
 		if(!empty($server))
 		{
-			$this->connect($server,$user,$pass);
-			$this->selectdb($dbname);
+			$this->connect($server,$user,$pass); // Connect to the server
+			$this->selectdb($dbname); // Select the database
 		}
 	}
 	
@@ -74,8 +74,8 @@ class MySQL
 	public function query($query)
 	{
 		$result = mysql_query($query,$this->link) or $this->halt($query);
-		$this->last_query = $query;
-		$this->query_count++;
+		$this->last_query = $query; // Set the last query run
+		$this->query_count++; // Update query count
 		return $result;
 	}
 	
@@ -85,7 +85,7 @@ class MySQL
 	 */
 	public function fetcharray($result)
 	{
-		$result = mysql_fetch_array($result); // or $this->halt();
+		$result = mysql_fetch_array($result);
 		return $result;
 	}
 	
@@ -153,26 +153,29 @@ class MySQL
 	 */
 	public function insert($table,$data)
 	{
+		// Get the table columns
 		$fields = array();
 		$getdefaults = $this->query("SHOW COLUMNS FROM ".$this->prefix.$table);
 		while($info = $this->fetcharray($getdefaults)) {
+			// Use the specified column value.
 			if(isset($data[$info['Field']])) {
 				if($info['Type'] == 'date'
 				or $info['Type'] == 'datetime'
 				or $info['Type'] == 'time')
-					$fields[$info['Field']] = "'".$this->res($data[$info['Field']])."'";
+					$fields[$info['Field']] = "'".$this->res($data[$info['Field']])."'"; // Time column
 				else
-					$fields[$info['Field']] = "'".$this->res($data[$info['Field']])."'";
+					$fields[$info['Field']] = "'".$this->res($data[$info['Field']])."'"; // Other column
 			} else {
+			// Use either the Default value or the value best used for the column type.
 				if($info['Type'] == 'date'
 				or $info['Type'] == 'datetime'
 				or $info['Type'] == 'time')
-					$fields[$info['Field']] = $this->res('NOW()');
+					$fields[$info['Field']] = $this->res('NOW()'); // Time column
 				elseif(substr($info['Type'],0,6) == 'bigint'
 				or substr($info['Type'],0,8) == 'smallint')
-					$fields[$info['Field']] = $this->res('NULL');
+					$fields[$info['Field']] = $this->res('NULL'); // Integer column
 				else
-					$fields[$info['Field']] = "'".$this->res($info['Default'])."'";
+					$fields[$info['Field']] = "'".$this->res($info['Default'])."'"; // Other
 			}
 		}
 		$this->query("INSERT INTO ".$this->prefix.$table." VALUES(".implode(', ',$fields).")");
