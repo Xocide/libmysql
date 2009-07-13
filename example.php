@@ -42,6 +42,18 @@ $results = $db->select('users',$args);
 // then use the normal while() loop with $db->fetcharray($results);
 
 /**
+ * Selecting data, a less easier way.
+ * Same table.
+ */
+$args = array(
+	'orderby' => 'is ASC',
+	'limit' => 50,
+	'where' => "name='Indiana Jones' OR name='Daniel Jackson' or name LIKE '% Carter'"
+	);
+$db->select('users',$args);
+// Works the same for delete();
+
+/**
  * Deleting data
  * Same table.
  */

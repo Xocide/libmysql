@@ -195,13 +195,15 @@ class MySQL
 		$limit = (isset($args['limit']) ? ' LIMIT '.$args['limit'] : NULL);
 		unset($args['limit']);
 		
-		if(isset($args['where'])) {
+		if(is_array($args['where'])) {
 			$fields = array();
 			foreach($args['where'] as $field => $value)
 			{
 				$fields[] = $field."='".$value."'";
 			}
 			$fields = ' WHERE '.implode(' AND ',$fields);
+		} else {
+			$fields = $args['where'];
 		}
 		
 		$query .= $fields;
@@ -222,13 +224,15 @@ class MySQL
 		$limit = (isset($args['limit']) ? ' LIMIT '.$args['limit'] : NULL);
 		unset($args['limit']);
 		
-		if(isset($args['where'])) {
+		if(is_array($args['where'])) {
 			$fields = array();
 			foreach($args['where'] as $field => $value)
 			{
 				$fields[] = $field."='".$value."'";
 			}
 			$fields = ' WHERE '.implode(' AND ',$fields);
+		} else {
+			$fields = ' WHERE '.$args['where'];
 		}
 		
 		$query .= $fields;
