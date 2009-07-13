@@ -184,6 +184,8 @@ class MySQL
 	/**
 	 * Select
 	 * Easily execute a select query.
+	 * @param string $table Table name
+	 * @param array $args The args to query with.
 	 */
 	public function select($table,$args)
 	{
@@ -216,6 +218,8 @@ class MySQL
 	/**
 	 * Delete
 	 * Easily execute a delete query.
+	 * @param string $table Table name
+	 * @param array $args The args to query with.
 	 */
 	public function delete($table,$args)
 	{
