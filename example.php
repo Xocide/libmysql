@@ -11,6 +11,7 @@
  */
 include('mysql.class.php');
 $db = new MySQL('localhost','root','root');
+$db->selectdb('mydatabase');
 
 /**
  * Inserting Data
@@ -38,6 +39,7 @@ $args = array(
 		)
 	);
 $results = $db->select('users',$args);
+// then use the normal while() loop with $db->fetcharray($results);
 
 /**
  * Deleting data
@@ -50,4 +52,11 @@ $args = array(
 		)
 	);
 $results = $db->delete('users',$args);
+
+/**
+ * Selecing data the old fashioned way
+ * Same table
+ */
+$results = $db->query("SELECT * FROM users WHERE name='Indiana Jones' ORDER BY id DESC LIMIT 50");
+// then use the normal while() loop with $db->fetcharray($results);
 ?>

@@ -208,7 +208,7 @@ class MySQL
 		$query .= $orderby;
 		$query .= $limit;
 		
-		$this->query($query);
+		return $this->query($query);
 	}
 	
 	/**
