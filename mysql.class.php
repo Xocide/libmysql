@@ -201,14 +201,40 @@ class MySQL
 			{
 				$fields[] = $field."='".$value."'";
 			}
-			$fields = ' WHERE '.implode(', ',$fields);
+			$fields = ' WHERE '.implode(' AND ',$fields);
 		}
 		
 		$query .= $fields;
 		$query .= $orderby;
 		$query .= $limit;
 		
-		echo $query;
+		$this->query($query);
+	}
+	
+	/**
+	 * Delete
+	 * Easily execute a delete query.
+	 */
+	public function delete($table,$args)
+	{
+		$query = 'DELETE FROM '.$table.' ';
+		
+		$limit = (isset($args['limit']) ? ' LIMIT '.$args['limit'] : NULL);
+		unset($args['limit']);
+		
+		if(isset($args['where'])) {
+			$fields = array();
+			foreach($args['where'] as $field => $value)
+			{
+				$fields[] = $field."='".$value."'";
+			}
+			$fields = ' WHERE '.implode(' AND ',$fields);
+		}
+		
+		$query .= $fields;
+		$query .= $limit;
+		
+		$this->query($query);
 	}
 	
 	/**
