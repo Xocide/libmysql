@@ -66,6 +66,13 @@ $args = array(
 $results = $db->delete('users',$args);
 
 /**
+ * Query First
+ * Same table
+ */
+$result = $db->queryfirst("SELECT * FROM users ORDER BY id DESC");
+// This queries the first row and returns the array of the data.
+
+/**
  * Selecing data the old fashioned way
  * Same table
  */

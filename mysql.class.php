@@ -139,6 +139,7 @@ class MySQL
 	/**
 	 * Query First
 	 * Query and fetch the array of the first row returned.
+	 * @param string $query The query.
 	 */
 	public function queryfirst($query)
 	{
