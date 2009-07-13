@@ -182,6 +182,36 @@ class MySQL
 	}
 	
 	/**
+	 * Select
+	 * Easily execute a select query.
+	 */
+	public function select($table,$args)
+	{
+		$query = 'SELECT * FROM '.$table.' ';
+		
+		$orderby = (isset($args['orderby']) ? " ORDER BY ".$args['orderby'] : NULL);
+		unset($args['orderby']);
+		
+		$limit = (isset($args['limit']) ? ' LIMIT '.$args['limit'] : NULL);
+		unset($args['limit']);
+		
+		if(isset($args['where'])) {
+			$fields = array();
+			foreach($args['where'] as $field => $value)
+			{
+				$fields[] = $field."='".$value."'";
+			}
+			$fields = ' WHERE '.implode(', ',$fields);
+		}
+		
+		$query .= $fields;
+		$query .= $orderby;
+		$query .= $limit;
+		
+		echo $query;
+	}
+	
+	/**
 	 * Get Fields
 	 * Get the fields of the specified table.
 	 * @param string $table Table name.
