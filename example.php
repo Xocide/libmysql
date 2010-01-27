@@ -23,7 +23,7 @@ $db->selectdb('mydatabase');
  */
 $data = array(
 	'name' => 'Indiana Jones',
-	'password' => sha1('ihatesnakes');
+	'password' => sha1('ihatesnakes')
 	);
 $db->insert('users',$data);
 

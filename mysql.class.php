@@ -154,32 +154,19 @@ class MySQL
 	 */
 	public function insert($table,$data)
 	{
-		// Get the table columns
+		// Get the table columns.
 		$fields = array();
-		$getdefaults = $this->query("SHOW COLUMNS FROM ".$this->prefix.$table);
-		while($info = $this->fetcharray($getdefaults)) {
-			// Use the specified column value.
-			if(isset($data[$info['Field']])) {
-				if($info['Type'] == 'date'
-				or $info['Type'] == 'datetime'
-				or $info['Type'] == 'time')
-					$fields[$info['Field']] = "'".$this->res($data[$info['Field']])."'"; // Time column
-				else
-					$fields[$info['Field']] = "'".$this->res($data[$info['Field']])."'"; // Other column
-			} else {
-			// Use either the Default value or the value best used for the column type.
-				if($info['Type'] == 'date'
-				or $info['Type'] == 'datetime'
-				or $info['Type'] == 'time')
-					$fields[$info['Field']] = $this->res('NOW()'); // Time column
-				elseif(substr($info['Type'],0,6) == 'bigint'
-				or substr($info['Type'],0,8) == 'smallint')
-					$fields[$info['Field']] = $this->res('NULL'); // Integer column
-				else
-					$fields[$info['Field']] = "'".$this->res($info['Default'])."'"; // Other
-			}
+		$values = array();
+		
+		// Split the field name and value into the arrays.
+		foreach($data as $field => $value)
+		{
+			$fields[] = $field;
+			$values[] = $value;
 		}
-		$this->query("INSERT INTO ".$this->prefix.$table." VALUES(".implode(', ',$fields).")");
+		
+		// Run the query.
+		$this->query("INSERT INTO ".$this->prefix.$table." (".implode(', ',$fields).") VALUES(".implode(', ',$values).")");
 	}
 	
 	/**
